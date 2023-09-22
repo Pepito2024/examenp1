@@ -23,8 +23,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double _altura = 170; // Altura predeterminada en cm
-  double _peso = 70; // Peso predeterminado en kg
+  double _altura = 170; // Valor inicial de la altura (en cm)
+  double _peso = 70;   // Valor inicial del peso (en kg)
 
   double _imc = 0;
   String _resultado = "";
@@ -35,8 +35,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
       if (_imc < 18.5) {
         _resultado = "Bajo peso";
-      } else if (_imc >= 18.5 && _imc <= 24.9) {
-        _resultado = "Peso normal";
+      } else if (_imc >= 18.5 && _imc < 25) {
+        _resultado = "Normal";
       } else {
         _resultado = "Sobrepeso";
       }
@@ -46,19 +46,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.amber,
       appBar: AppBar(
-        title: Text('IMC APP'),
+        title: Text('Calculadora de IMC'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+          children: <Widget>[
+            SizedBox(height: 20),
             Text(
-              'Bienvenido selecciona tu altura y tu peso',
+              'Bienvenido, selecciona tu altura y tu peso',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
-
+            SizedBox(height: 30),
             Text(
               'Selecciona tu altura (cm):',
             ),
@@ -73,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             Text('Altura: ${_altura.toStringAsFixed(1)} cm'),
-            SizedBox(height: 20),
+            SizedBox(height: 30),
             Text(
               'Selecciona tu peso (kg):',
             ),
@@ -93,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: _calcularIMC,
               child: Text('Calcular IMC'),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 50),
             Text(
               'Tu IMC es: ${_imc.toStringAsFixed(2)}',
               style: TextStyle(fontSize: 20),
@@ -102,6 +103,20 @@ class _MyHomePageState extends State<MyHomePage> {
               'Resultado: $_resultado',
               style: TextStyle(fontSize: 20),
             ),
+            SizedBox(height: 20),
+            if (_resultado.isNotEmpty)
+              Container(
+                height: 150,
+                child: PageView(
+                  children: [
+                    _resultado == "Bajo peso"
+                        ? Image.asset('assets/images/bajo_peso.jpg')
+                        : _resultado == "Normal"
+                            ? Image.asset('assets/images/normal.jpg')
+                            : Image.asset('assets/images/sobrepeso.jpg'),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
